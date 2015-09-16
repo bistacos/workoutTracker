@@ -21,8 +21,6 @@ var workoutTracker = React.createClass({
         <Text style={styles.header}>
            workoutTracker 
         </Text>
-        <Form>
-        </Form>
       </View>
     );
   }
