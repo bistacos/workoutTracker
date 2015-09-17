@@ -16,7 +16,6 @@ var {
   View,
 } = React;
 
-// the main component
 var workoutTracker = React.createClass({
   getDefaultProps: function () {
     return {
@@ -36,7 +35,8 @@ var workoutTracker = React.createClass({
 
   render: function() {
     return (
-      <View>
+
+      <View> 
           <Text style={styles.header}>
              Workout Tracker 
           </Text>
@@ -52,10 +52,10 @@ var workoutTracker = React.createClass({
             timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
             onDateChange={this.onDateChange}
           />
-          
-          <ExerciseRow style={styles.text}>
+        </View>
+        <View>
+          <ExerciseRow style={styles.container}>
           </ExerciseRow>
-
         </View>
       </View>
     );
@@ -64,57 +64,64 @@ var workoutTracker = React.createClass({
 
 var PickerItemIOS = PickerIOS.Item;
 
-var EXERCISES = ['Bench', 'Chinups', 'Deadlift', 'Press', 
-                  'Power Clean', 'Squat'];
+// Bench, Chinups, Deadlift, Power Clean, Press, Squat
+var EXERCISES = {
+  bench: {
+    name: 'Bench',
+  },
+  chinups: {
+    name: 'Chinups',
+  },
+  deadlift: {
+    name: 'Deadlift',
+  },
+  powerClean: {
+    name: 'Power Clean',
+  },
+  press: {
+    name: 'Press',
+  },
+  squat: {
+    name: 'Squat',
+  },
+};
 
 var ExerciseRow = React.createClass({
-  getDefaultProps: function () {
-    return {
-      date: new Date(),
-      text: '',
-    };
-  },
 
   getInitialState: function () {
     return {
-      text: this.props.text,
-      exercise: 'Squat',
+      text: '',
+      exercise: 'squat',
     };
   },  
 
   render: function () {
-    // var selected = EXERCISES[5];
     return (
       <View>
-        <Text>Exercise:</Text>
-        <PickerIOS 
-          selectedValue={this.state.exercise}>
-          </PickerIOS>
+        <Text style={styles.text}>Please choose an exercise:</Text>
+        <PickerIOS
+          selectedValue={this.state.exercise}
+          onValueChange={(exercise) => this.setState({exercise})}>
+          {Object.keys(EXERCISES).map((exercise) => (
+            <PickerItemIOS
+              key={exercise}
+              value={exercise}
+              label={EXERCISES[exercise].name}
+              />
+            )
+          )}
+        </PickerIOS>
+
         <TextInput
           style={{height: 20, width: 50, margin: 10, borderColor: 'gray', borderWidth: 1}}
           onChangeText={(text) => this.setState({text})}
           value={this.state.text}
         />
+        <Text style={styles.text}>
+           {this.state.text}
+        </Text>
       </View>
     );
-
-    // return (
-    //   <View>
-    //     <Text>Exercise:</Text>
-        // <PickerIOS 
-        //   selectedValue={this.state.exercise} >
-        //   // onValueChange={(exercise) => this.setState({exercise, })}
-        // </PickerIOS>
-    //     <TextInput
-    //       style={{height: 20, width: 50, margin: 10, borderColor: 'gray', borderWidth: 1}}
-    //       onChangeText={(text) => this.setState({text})}
-    //       value={this.state.text}
-    //     />
-    //     <Text style={styles.text}>
-    //       {this.state.text}
-    //     </Text>
-    //   </View>
-    // );
   },
 });
 
@@ -136,7 +143,6 @@ var styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   text: {
-    textAlign: 'center',
     color: '#333333',
     margin: 10,
     fontWeight: 'bold',
